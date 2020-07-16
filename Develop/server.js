@@ -43,13 +43,30 @@ app.post("/api/notes", (req, res) => {
     console.log(newNote);
     // Add newNote object to notes array
     notes.push(newNote);
-    // For loop to assign id numbers to the objects in the array
+    // For loop to assign each note a unique id number when saved to the array
     for (var i = 0; i < notes.length; i++){
         notes[i].id = i + 1
     }
     // Add newNote to the `db.json` file
     fs.writeFileSync("./db/db.json", JSON.stringify(notes));
     // Then return the new note to the client
+    res.json(notes);
+})
+
+// DELETE `/api/notes/:id`
+app.delete('/api/notes/:id', (req, res) => {
+    // Variable for selected note id
+    let deleted = req.params.id;
+    console.log(deleted);
+    // Read all notes from the `db.json` file and parse 
+    let notes = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+    // Filter through array and create new array sans deleted note
+    notes = notes.filter(thisNote => {
+        return thisNote.id != deleted;
+    });
+    // Rewrite notes to the `db.json` file
+    fs.writeFileSync("./db/db.json", JSON.stringify(notes));
+    // Then return the note array sans deleted note to the client
     res.json(notes);
 })
 
