@@ -7,41 +7,50 @@ const express = require("express");
 // Set up the Express App
 // ===============================================================================
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT | 3000;
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.static('public'));
 
 // Notes (DATA)
 // =============================================================
-var notes = [];
+let notes = [];
 
 // Routes
 // ===============================================================================
 
 // GET `/` returns the `index.html` file
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "index.html"));
+    res.sendFile(path.join(__dirname, "/public/index.html"));
 });
 
 // GET `/notes` returns the `notes.html` file
 app.get("/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, "notes.html"));
+    res.sendFile(path.join(__dirname, "/public/notes.html"));
 });
 
 // GET `/api/notes` reads the `db.json` file and return all saved notes as JSON.
 app.get("/api/notes", (req, res) => {
-    res.json(notes);
+    res.sendFile(path.join(__dirname, "/db/db.json"));
 });
 
-// POST `/api/notes` - Should receive a new note to save on the request body, add it to the `db.json` file, and then return the new note to the client.
+// POST `/api/notes` 
 app.post("/api/notes", (req, res) => {
-    var newNote = req.body;
-    newNote.routeName = newNote.title.replace(/\s+/g, "").toLowerCase();
+    // Receive a new note to save on the request body
+    let newNote = req.body;
     console.log(newNote);
+    // Add newNote object to notes array
     notes.push(newNote);
-    res.json(newNote);
+    // For loop to assign id numbers to the objects in the array
+    for (var i = 0; i < notes.length; i++){
+        notes[i].id = i + 1
+    }
+    // Add newNote to the `db.json` file
+    fs.writeFileSync("./db/db.json", JSON.stringify(notes));
+    // Then return the new note to the client
+    res.json(notes);
 })
 
 // Starts the server to begin listening
