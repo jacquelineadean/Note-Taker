@@ -1,5 +1,7 @@
 # Unit 11 Express Homework: Note Taker
 
+![Demo](Assets/demo.gif)
+
 ## Description
 
 For users that need to keep track of a lot of information, it's easy to forget or be unable to recall something important. Being able to take persistent notes allows users to have written information available when needed. The application allows users to write, save, and delete existing notes in order to keep an updated log of information.
