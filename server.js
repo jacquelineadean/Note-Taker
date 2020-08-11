@@ -7,7 +7,7 @@ const express = require("express");
 // Set up the Express App
 // ===============================================================================
 const app = express();
-const PORT = process.env.PORT | 3000;
+const PORT = process.env.PORT || 3001;
 
 // Sets up the Express app to handle data parsing
 app.use(express.urlencoded({ extended: true }));
@@ -23,12 +23,12 @@ let notes = [];
 
 // GET `/` returns the `index.html` file
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/index.html"));
+    res.sendFile(path.join(__dirname, "public/index.html"));
 });
 
 // GET `/notes` returns the `notes.html` file
 app.get("/notes", (req, res) => {
-    res.sendFile(path.join(__dirname, "/public/notes.html"));
+    res.sendFile(path.join(__dirname, "public/notes.html"));
 });
 
 // GET `/api/notes` reads the `db.json` file and return all saved notes as JSON.
